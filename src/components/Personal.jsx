@@ -8,6 +8,9 @@ function Personal () {
       <Input type={"text"} label={"Fullname"} id={"fullName"} />
       <Input type={"email"} label={"E-mail Address"} id={"mail"} />
       <Input type={"text"} label={"Phone Number"} id={"phone"} />
+      <Input type={"text"} label={"Website"} id={"website"} />
+      <label htmlFor="summary">Professional Summary: </label>
+      <textarea name="summary" id="summary"></textarea>
     </div>
   )
 }

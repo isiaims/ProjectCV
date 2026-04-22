@@ -1,12 +1,10 @@
 export const user = {
-  image: {
-    src: "",
-    alt: ""
-  },
   details: {
-    name: "",
-    mail: "",
-    phone: ""
+    name: "Person LastName",
+    mail: "personmail@mail.com",
+    phone: "+234-12345678",
+    website: "lastnameperson.com",
+    summary: "I just get things done"
   },
   education: [
     {
