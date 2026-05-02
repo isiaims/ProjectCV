@@ -5,7 +5,6 @@ import PersonalContainer from './Personal'
 import ExperienceContainer from './Experience'
 import EducationContainer from './Education'
 import { user } from '../assets/data'
-import Main from './CV'
 
 function Header () {
   return (
@@ -16,28 +15,26 @@ function Header () {
   )
 }
 
-export function Input ({ type, label, id, placeholder }) {
+export function Input ({ type, label, id, placeholder, handleChange }) {
   return (
-    <>
+    <div className={id}>
       <label htmlFor={id}>{label + ": "}</label>
-      <input type={type} id={id} name={id} placeholder={placeholder} />
-    </>
+      <input type={type} id={id} name={id} defaultValue={placeholder}  onChange={handleChange}/>
+    </div>
   )
 }
 
 function App() {
+  const [info, setInfo] = useState(user)
 
   return (
     <>
       <Header />
       <section>
         <PersonalContainer />
-        <EducationContainer />
-        <ExperienceContainer />
+        <EducationContainer/>
+        <ExperienceContainer/>
       </section>
-      <main>
-        <Main />
-      </main>
     </>
   )
 }

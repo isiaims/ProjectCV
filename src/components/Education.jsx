@@ -32,9 +32,9 @@ import { Input } from "./App";
 }
 
 export default function EducationContainer () {
-  const [activeSchool, setActiveSchool] = useState(user.education.length - 1)
   const [writer, setWriter] = useState(user)
   const schools = writer.education
+  const [activeSchool, setActiveSchool] = useState(schools.length - 1)
   
   function handleAddMoreEduc () {
     const newSchools = [...schools];
@@ -46,10 +46,7 @@ export default function EducationContainer () {
       to: 0
     })
     setWriter({...writer, education: newSchools})
-  }
-
-  function handleEdit (school) {
-    setActiveSchool(school.id)
+    setActiveSchool(schools.length)
   }
 
   function handleSubmit (e, school) {
@@ -62,24 +59,26 @@ export default function EducationContainer () {
     currSchool.to = e.target[3].value
     setActiveSchool(null)
     setWriter({...writer, education: newSchools})
-    console.log(writer)
   }
   
   return (
-    <div className="school">
-      <h2>Education</h2>
-      {
-        schools.map(school => (
-            <Education 
-              key={school.id}
-              school={school}
-              isActive={activeSchool === school.id}
-              onEdit={() => handleEdit(school)}
-              onEdited={(e) => handleSubmit(e, school)}
-            />
-        ))
-      }
-      <button onClick={handleAddMoreEduc}>Add More</button>
-    </div>
+    <>
+      <div className="school">
+        <h2>Education</h2>
+        {
+          schools.map(school => (
+              <Education
+                key={school.id}
+                school={school}
+                isActive={activeSchool === school.id}
+                onEdit={() => setActiveSchool(school.id)}
+                onEdited={(e) => handleSubmit(e, school)}
+              />
+          ))
+        }
+        <button onClick={handleAddMoreEduc}>Add More</button>
+      </div>
+      <hr />
+    </>
   )
 }

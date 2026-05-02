@@ -4,7 +4,7 @@ import { Input } from "./App";
 
 function Experience ({ company, isActive, onEdit, onEdited }) {
   return (
-    <div key={company.id}>
+    <div key={company.id} className="company">
       {
         isActive ?
         (
@@ -35,8 +35,8 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
 
 export default function ExperienceContainer () {
   const [writer, setWriter] = useState(user)
-  const [activeCompany, setActiveCompany] = useState(user.experience.length - 1)
   const companies = writer.experience
+  const [activeCompany, setActiveCompany] = useState(companies.length - 1)
   
   function handleAddMoreExpe () {
     const newCompanies = [...companies];
@@ -49,10 +49,7 @@ export default function ExperienceContainer () {
       to: 0
     })
     setWriter({...writer, experience: newCompanies})
-  }
-
-  function handleEdit (company) {
-    setActiveCompany(company.id)
+    setActiveCompany(companies.length)
   }
 
   function handleSubmit (e, company) {
@@ -65,24 +62,27 @@ export default function ExperienceContainer () {
     currCompany.from = e.target[3].value
     currCompany.to = e.target[4].value
     setActiveCompany(null)
-    setWriter({...writer, experience: newCompany})
+    setWriter({...writer, experience: newCompany}) 
   }
 
   return (
-    <div className="experience">
-      <h2>Experience</h2>
-      {
-        companies.map(company => (
-          <Experience
-            key={company.id}
-            company={company}
-            isActive={activeCompany === company.id}
-            onEdit={() => handleEdit(company)}
-            onEdited={(e) => handleSubmit(e, company)}
-          />
-        ))
-      }
-      <button onClick={handleAddMoreExpe}>Add More</button>
+    <>
+      <div className="experience">
+        <h2>Experience</h2>
+        {
+          companies.map(company => (
+            <Experience
+              key={company.id}
+              company={company}
+              isActive={activeCompany === company.id}
+              onEdit={() => setActiveCompany(company.id)}
+              onEdited={(e) => handleSubmit(e, company)}
+            />
+          ))
+        }
+        <button onClick={handleAddMoreExpe}>Add More</button>
       </div>
+      <hr />
+    </>
   )
 }
