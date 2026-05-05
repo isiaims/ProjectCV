@@ -13,8 +13,10 @@ function Personal ({ user, isEditing, onEdited, onEdit }) {
               <Input type={"email"} label={"E-mail Address"} id={"mail"} placeholder={user.mail}/>
               <Input type={"text"} label={"Phone Number"} id={"phone"} placeholder={user.phone}/>
               <Input type={"text"} label={"Website"} id={"website"} placeholder={user.website}/>
-              <label htmlFor="summary">Professional Summary: </label>
-              <textarea name="summary" id="summary" defaultValue={user.summary}></textarea>
+              <div>
+                <label htmlFor="summary">Professional Summary: </label>
+                <textarea name="summary" id="summary" defaultValue={user.summary}></textarea>
+              </div>
               <button>Submit</button>
             </form>
           ) :
@@ -23,7 +25,7 @@ function Personal ({ user, isEditing, onEdited, onEdit }) {
               <div className="user-name">
                 <h2>{user.name.toUpperCase()}</h2>
               </div>
-              <div>
+              <div className="contact">
                 <p>{user.mail}</p>
                 <p>{user.phone}</p>
                 <p>{user.website}</p>

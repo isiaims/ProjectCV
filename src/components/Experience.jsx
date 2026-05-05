@@ -11,20 +11,23 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
           <form onSubmit={onEdited}>
             <Input type={"text"} label={"Company"} id={"company"} placeholder={company.companyName}/>
             <Input type={"text"} label={"Position/Job Title"} id={"post"} placeholder={company.position}/>
-            <label htmlFor="description">Brief Description of Main Responsibilities: </label>
-            <textarea name="description" id="description" placeholder={company.description}></textarea>
-            <Input type={"month"} label={"From"} id={"begin" + `${company.id}`} />
-            <Input type={"month"} label={"To"} id={"till" + `${company.id}`} />
+            <div>
+              <label htmlFor="description">Brief Description of Main Responsibilities: </label>
+              <textarea name="description" id="description" defaultValue={company.description}></textarea>
+            </div>
+            <Input type={"month"} label={"From"} id={"begin" + `${company.id}`} placeholder={company.from}/>
+            <Input type={"month"} label={"To"} id={"till" + `${company.id}`} placeholder={company.to}/>
             <button>Submit</button>
           </form>
         ) : 
         (
           <>
-            <h3>Organization: {company.companyName}</h3>
-            <p>Position: {company.position}</p>
-            <p>Main Responsibilities: {company.description}</p>
-            <p>From: {company.from}</p>
-            <p>To: {company.to}</p>
+            <h3>{company.companyName}</h3>
+            <p>{company.position}</p>
+            <div className="date">
+              <p>{company.description}</p>
+              <p>{company.from} - {company.to}</p>
+            </div>
             <button onClick={onEdit}>Edit</button>
           </>
         )
@@ -54,6 +57,7 @@ export default function ExperienceContainer () {
 
   function handleSubmit (e, company) {
     e.preventDefault()
+    e.target.parentElement.parentElement.classList.add("submited")
     const newCompany = [...companies];
     const currCompany = newCompany[company.id]
     currCompany.companyName = e.target[0].value

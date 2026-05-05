@@ -10,19 +10,20 @@ import { Input } from "./App";
         isActive ? 
         (
           <form onSubmit={onEdited}>
-            <Input type={"text"} label={"Institution Attended"} id={"school"} placeholder={`${school.schoolName}`}/>
+            <Input type={"text"} label={"Institution Attended"} id={"college"} placeholder={`${school.schoolName}`}/>
             <Input type={"text"} label={"Course  Studied"} id={"course"} placeholder={`${school.course}`}/>
-            <Input type={"month"} label={"From"} id={"date-from" + `${school.id}`} />
-            <Input type={"month"} label={"To"} id={"date-to" + `${school.id}`} />
+            <Input type={"month"} label={"From"} id={"date-from" + `${school.id}`} placeholder={school.from}/>
+            <Input type={"month"} label={"To"} id={"date-to" + `${school.id}`} placeholder={school.to}/>
             <button>Submit</button>
           </form>
         ) :
         (
           <>
-            <h3>School attended: {school.schoolName}</h3>
-            <p>Course studied: {school.course}</p>
-            <p>From: {school.from}</p>
-            <p>To: {school.to}</p>
+            <h3>{school.schoolName}</h3>
+            <div className="date">
+              <p>{school.course}</p>
+              <p>{school.from} - {school.to}</p>
+            </div>
             <button onClick={onEdit}>Edit</button>
           </>
         )

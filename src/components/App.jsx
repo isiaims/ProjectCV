@@ -19,7 +19,7 @@ export function Input ({ type, label, id, placeholder, handleChange }) {
   return (
     <div className={id}>
       <label htmlFor={id}>{label + ": "}</label>
-      <input type={type} id={id} name={id} defaultValue={placeholder}  onChange={handleChange}/>
+      <input type={type} id={id} name={id} defaultValue={placeholder}  onChange={handleChange} autoComplete='on'/>
     </div>
   )
 }
