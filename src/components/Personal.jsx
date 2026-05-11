@@ -1,5 +1,5 @@
 import { use, useState } from "react";
-import { user } from "../assets/data";
+// import { user } from "../assets/data";
 import { Input } from "./App";
 
 function Personal ({ user, isEditing, onEdited, onEdit }) {
@@ -43,21 +43,20 @@ function Personal ({ user, isEditing, onEdited, onEdit }) {
   )
 }
 
-export default function PersonalContainer () {
-  const [writer, setWriter] = useState(user)
+export default function PersonalContainer ({ user, setUser }) {
   const [editing, setEditing] = useState(true)
-  const info = writer.details
+  const info = user.details
 
   function handleSubmit (e) {
     e.preventDefault()
     e.target.parentElement.parentElement.classList.add("submited")
-    const user = {...info}
-    user.name = e.target[0].value
-    user.mail = e.target[1].value
-    user.phone = e.target[2].value
-    user.website = e.target[3].value
-    user.summary = e.target[4].value
-    setWriter({...writer, details: user})
+    const newData = {...info}
+    newData.name = e.target[0].value
+    newData.mail = e.target[1].value
+    newData.phone = e.target[2].value
+    newData.website = e.target[3].value
+    newData.summary = e.target[4].value
+    setUser({...user, details: newData})
     setEditing(false)
   }
 

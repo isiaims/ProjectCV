@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { user } from "../assets/data";
 import { Input } from "./App";
 
 function Experience ({ company, isActive, onEdit, onEdited }) {
@@ -26,7 +25,7 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
             <p>{company.position}</p>
             <div className="date">
               <p>{company.description}</p>
-              <p>{company.from} - {company.to}</p>
+              <p>{company.from.split("-")[0]} - {company.to.split("-")[0]}</p>
             </div>
             <button onClick={onEdit}>Edit</button>
           </>
@@ -36,13 +35,26 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
   )
 }
 
-export default function ExperienceContainer () {
-  const [writer, setWriter] = useState(user)
-  const companies = writer.experience
+export default function ExperienceContainer ({ user, setUser }) {
+  const companies = user.experience
   const [activeCompany, setActiveCompany] = useState(companies.length - 1)
   
-  function handleAddMoreExpe () {
+  function handleAddMoreExpe (e) {
     const newCompanies = [...companies];
+
+    // Save input values from active company
+    if (activeCompany !== null) {
+      const formDiv = [...e.target.parentElement.childNodes]
+        .filter(elem => elem.tagName === "DIV" && elem.childNodes[0].tagName === "FORM")[0].childNodes[0]
+      const currCompany = newCompanies[activeCompany]
+      currCompany.companyName = formDiv[0].value
+      currCompany.position = formDiv[1].value
+      currCompany.description = formDiv[2].value
+      currCompany.from = formDiv[3].value
+      currCompany.to = formDiv[4].value
+    }
+
+    // Create new fields for new company entries
     newCompanies.push({
       id: newCompanies.length,
       companyName: "",
@@ -51,7 +63,7 @@ export default function ExperienceContainer () {
       from: 0,
       to: 0
     })
-    setWriter({...writer, experience: newCompanies})
+    setUser({...user, experience: newCompanies})
     setActiveCompany(companies.length)
   }
 
@@ -66,7 +78,7 @@ export default function ExperienceContainer () {
     currCompany.from = e.target[3].value
     currCompany.to = e.target[4].value
     setActiveCompany(null)
-    setWriter({...writer, experience: newCompany}) 
+    setUser({...user, experience: newCompany}) 
   }
 
   return (

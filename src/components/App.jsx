@@ -5,6 +5,7 @@ import PersonalContainer from './Personal'
 import ExperienceContainer from './Experience'
 import EducationContainer from './Education'
 import { user } from '../assets/data'
+import PreviewCV from './Preview'
 
 function Header () {
   return (
@@ -31,9 +32,9 @@ function App() {
     <>
       <Header />
       <section>
-        <PersonalContainer />
-        <EducationContainer/>
-        <ExperienceContainer/>
+        <PersonalContainer user={info} setUser={setInfo}/>
+        <EducationContainer user={info} setUser={setInfo}/>
+        <ExperienceContainer user={info} setUser={setInfo}/>
       </section>
     </>
   )

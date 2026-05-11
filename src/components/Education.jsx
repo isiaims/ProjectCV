@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { user } from "../assets/data";
 import { Input } from "./App";
 
 
@@ -22,7 +21,7 @@ import { Input } from "./App";
             <h3>{school.schoolName}</h3>
             <div className="date">
               <p>{school.course}</p>
-              <p>{school.from} - {school.to}</p>
+              <p>{school.from.split("-")[0]} - {school.to.split("-")[0]}</p>
             </div>
             <button onClick={onEdit}>Edit</button>
           </>
@@ -32,13 +31,25 @@ import { Input } from "./App";
   )
 }
 
-export default function EducationContainer () {
-  const [writer, setWriter] = useState(user)
-  const schools = writer.education
+export default function EducationContainer ({ user, setUser }) {
+  const schools = user.education
   const [activeSchool, setActiveSchool] = useState(schools.length - 1)
   
-  function handleAddMoreEduc () {
+  function handleAddMoreEduc (e) {
     const newSchools = [...schools];
+
+    // Save input values from active school
+    if (activeSchool !== null) {
+      const formDiv = [...e.target.parentElement.childNodes]
+        .filter(elem => elem.tagName === "DIV" && elem.childNodes[0].tagName === "FORM")[0].childNodes[0]
+      const currSchool = newSchools[activeSchool]
+      currSchool.schoolName = formDiv[0].value
+      currSchool.course = formDiv[1].value
+      currSchool.from = formDiv[2].value
+      currSchool.to = formDiv[3].value
+    }
+
+    // Create new fields for new school entries
     newSchools.push({
       id: newSchools.length,
       schoolName: "",
@@ -46,7 +57,7 @@ export default function EducationContainer () {
       from: 0,
       to: 0
     })
-    setWriter({...writer, education: newSchools})
+    setUser({...user, education: newSchools})
     setActiveSchool(schools.length)
   }
 
@@ -59,7 +70,7 @@ export default function EducationContainer () {
     currSchool.from = e.target[2].value
     currSchool.to = e.target[3].value
     setActiveSchool(null)
-    setWriter({...writer, education: newSchools})
+    setUser({...user, education: newSchools})
   }
   
   return (
@@ -77,7 +88,7 @@ export default function EducationContainer () {
               />
           ))
         }
-        <button onClick={handleAddMoreEduc}>Add More</button>
+        <button onClick={(e) => handleAddMoreEduc(e)}>Add More</button>
       </div>
       <hr />
     </>
