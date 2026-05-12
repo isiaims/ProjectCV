@@ -5,7 +5,6 @@ import PersonalContainer from './Personal'
 import ExperienceContainer from './Experience'
 import EducationContainer from './Education'
 import { user } from '../assets/data'
-import PreviewCV from './Preview'
 
 function Header () {
   return (
