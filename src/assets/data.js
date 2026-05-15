@@ -8,7 +8,7 @@ export const user = {
   },
   education: [
     {
-      id: 0,
+      id: crypto.randomUUID(),
       schoolName: "TOP College, WorldWideWeb, Internet.",
       course: "Fulstack Web Development",
       from: "2022-01",
@@ -17,7 +17,7 @@ export const user = {
   ],
   experience: [
     {
-      id: 0,
+      id: crypto.randomUUID(),
       companyName: "Self Employed Inc.",
       position: "Junior Front-End Developer",
       description: "Did this and that.",

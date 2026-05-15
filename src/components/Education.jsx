@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "./App";
 
 
- function Education ({ school, isActive, onEdit, onEdited }) {
+ function Education ({ school, isActive, onEdit, onEdited, onDelete }) {
   return (
     <div>
       {
@@ -24,6 +24,7 @@ import { Input } from "./App";
               <p>{school.from.split("-")[0]} - {school.to.split("-")[0]}</p>
             </div>
             <button onClick={onEdit}>Edit</button>
+            <button onClick={onDelete}>Delete</button>
           </>
         )
       }
@@ -33,44 +34,55 @@ import { Input } from "./App";
 
 export default function EducationContainer ({ user, setUser }) {
   const schools = user.education
-  const [activeSchool, setActiveSchool] = useState(schools.length - 1)
+  const [activeSchool, setActiveSchool] = useState(schools[schools.length - 1].id)
   
   function handleAddMoreEduc (e) {
-    const newSchools = [...schools];
+    // Create a safe deep copy of schools
+    const newSchools = schools.map(school => ({...school}));
 
     // Save input values from active school
     if (activeSchool !== null) {
-      const formDiv = [...e.target.parentElement.childNodes]
-        .filter(elem => elem.tagName === "DIV" && elem.childNodes[0].tagName === "FORM")[0].childNodes[0]
-      const currSchool = newSchools[activeSchool]
+      const formDiv = e.currentTarget.closest("div").querySelector("form")
+      const schoolID = newSchools.findIndex(item => item.id === activeSchool)
+      const currSchool = newSchools[schoolID]
       currSchool.schoolName = formDiv[0].value
       currSchool.course = formDiv[1].value
       currSchool.from = formDiv[2].value
       currSchool.to = formDiv[3].value
     }
 
+    const id = crypto.randomUUID()
     // Create new fields for new school entries
     newSchools.push({
-      id: newSchools.length,
+      id: id,
       schoolName: "",
       course: "",
-      from: 0,
-      to: 0
+      from: "2000-01",
+      to: "2004-12"
     })
     setUser({...user, education: newSchools})
-    setActiveSchool(schools.length)
+    setActiveSchool(id)
   }
 
   function handleSubmit (e, school) {
     e.preventDefault()
-    const newSchools = [...schools];
-    const currSchool = newSchools[school.id]
+    const newSchools = schools.map(school => ({...school}));
+    const schoolID = newSchools.findIndex(item => item.id === school.id)
+    const currSchool = newSchools[schoolID]
     currSchool.schoolName = e.target[0].value
     currSchool.course = e.target[1].value
     currSchool.from = e.target[2].value
     currSchool.to = e.target[3].value
     setActiveSchool(null)
     setUser({...user, education: newSchools})
+  }
+
+  function handleDelete (id) {
+    if (schools.length > 1) {
+      const newSchools = schools.map(school => ({...school}));
+      newSchools.splice(newSchools.findIndex(item => item.id === id), 1)
+      setUser({...user, education: newSchools})
+    } else {setActiveSchool(id)}
   }
   
   return (
@@ -85,10 +97,11 @@ export default function EducationContainer ({ user, setUser }) {
                 isActive={activeSchool === school.id}
                 onEdit={() => setActiveSchool(school.id)}
                 onEdited={(e) => handleSubmit(e, school)}
+                onDelete={() => handleDelete(school.id)}
               />
           ))
         }
-        <button onClick={(e) => handleAddMoreEduc(e)}>Add More</button>
+        <button onClick={(e) => {handleAddMoreEduc(e)}}>Add More</button>
       </div>
       <hr />
     </>

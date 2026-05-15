@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "./App";
 
-function Experience ({ company, isActive, onEdit, onEdited }) {
+function Experience ({ company, isActive, onEdit, onEdited, onDelete }) {
   return (
     <div key={company.id} className="company">
       {
@@ -28,6 +28,7 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
               <p>{company.from.split("-")[0]} - {company.to.split("-")[0]}</p>
             </div>
             <button onClick={onEdit}>Edit</button>
+            <button onClick={onDelete}>Delete</button>
           </>
         )
       }
@@ -37,16 +38,15 @@ function Experience ({ company, isActive, onEdit, onEdited }) {
 
 export default function ExperienceContainer ({ user, setUser }) {
   const companies = user.experience
-  const [activeCompany, setActiveCompany] = useState(companies.length - 1)
+  const [activeCompany, setActiveCompany] = useState(companies.at(-1).id)
   
   function handleAddMoreExpe (e) {
-    const newCompanies = [...companies];
+    const newCompanies = companies.map(company => ({...company}));
 
     // Save input values from active company
     if (activeCompany !== null) {
-      const formDiv = [...e.target.parentElement.childNodes]
-        .filter(elem => elem.tagName === "DIV" && elem.childNodes[0].tagName === "FORM")[0].childNodes[0]
-      const currCompany = newCompanies[activeCompany]
+      const formDiv = e.currentTarget.closest("div").querySelector("form")
+      const currCompany = newCompanies[newCompanies.findIndex(item => item.id === activeCompany)]
       currCompany.companyName = formDiv[0].value
       currCompany.position = formDiv[1].value
       currCompany.description = formDiv[2].value
@@ -54,31 +54,40 @@ export default function ExperienceContainer ({ user, setUser }) {
       currCompany.to = formDiv[4].value
     }
 
+    const id = crypto.randomUUID()
     // Create new fields for new company entries
     newCompanies.push({
-      id: newCompanies.length,
+      id: id,
       companyName: "",
       position: "",
       description: "",
-      from: 0,
-      to: 0
+      from: "2000-01",
+      to: "2001-01"
     })
     setUser({...user, experience: newCompanies})
-    setActiveCompany(companies.length)
+    setActiveCompany(id)
   }
 
   function handleSubmit (e, company) {
     e.preventDefault()
     e.target.parentElement.parentElement.classList.add("submited")
-    const newCompany = [...companies];
-    const currCompany = newCompany[company.id]
+    const newCompanies = [...companies];
+    const currCompany = newCompanies[newCompanies.findIndex(item => item.id === company.id)]
     currCompany.companyName = e.target[0].value
     currCompany.position = e.target[1].value
     currCompany.description = e.target[2].value
     currCompany.from = e.target[3].value
     currCompany.to = e.target[4].value
     setActiveCompany(null)
-    setUser({...user, experience: newCompany}) 
+    setUser({...user, experience: newCompanies}) 
+  }
+  
+  function handleDelete (id) {
+    if (companies.length > 1) {
+      const newCompanies = [...companies];
+      newCompanies.splice(newCompanies.findIndex(item => item.id === id), 1)
+      setUser({...user, experience: newCompanies}) 
+    } else (setActiveCompany(id))
   }
 
   return (
@@ -93,6 +102,7 @@ export default function ExperienceContainer ({ user, setUser }) {
               isActive={activeCompany === company.id}
               onEdit={() => setActiveCompany(company.id)}
               onEdited={(e) => handleSubmit(e, company)}
+              onDelete={() => handleDelete(company.id)}
             />
           ))
         }
