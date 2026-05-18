@@ -63,9 +63,14 @@ div.school, div.experience {
 div.details > button {
     margin: 5px;
 }
-section > div > div > *  {
+form {
     display: grid;
     row-gap: 10px;
+}
+div.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
 }
 section > div > div > * > div {
     display: grid;

@@ -23,8 +23,10 @@ import { Input } from "./App";
               <p>{school.course}</p>
               <p>{school.from.split("-")[0]} - {school.to.split("-")[0]}</p>
             </div>
-            <button onClick={onEdit}>Edit</button>
-            <button onClick={onDelete}>Delete</button>
+            <div className="buttons">
+              <button onClick={onEdit}>Edit</button>
+              <button onClick={onDelete}>Delete</button>
+            </div>
           </>
         )
       }
@@ -78,11 +80,18 @@ export default function EducationContainer ({ user, setUser }) {
   }
 
   function handleDelete (id) {
+    const newSchools = schools.map(school => ({...school}));
     if (schools.length > 1) {
-      const newSchools = schools.map(school => ({...school}));
       newSchools.splice(newSchools.findIndex(item => item.id === id), 1)
-      setUser({...user, education: newSchools})
-    } else {setActiveSchool(id)}
+    } else {
+      const school = newSchools[newSchools.findIndex(item => item.id === id)]
+      school.schoolName = ""
+      school.course = ""
+      school.from = "2000-01"
+      school.to = "2004-12"
+      setActiveSchool(id)
+    }
+    setUser({...user, education: newSchools})
   }
   
   return (

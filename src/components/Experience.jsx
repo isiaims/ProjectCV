@@ -27,8 +27,10 @@ function Experience ({ company, isActive, onEdit, onEdited, onDelete }) {
               <p>{company.description}</p>
               <p>{company.from.split("-")[0]} - {company.to.split("-")[0]}</p>
             </div>
-            <button onClick={onEdit}>Edit</button>
-            <button onClick={onDelete}>Delete</button>
+            <div className="buttons">
+              <button onClick={onEdit}>Edit</button>
+              <button onClick={onDelete}>Delete</button>
+            </div>
           </>
         )
       }
@@ -71,7 +73,7 @@ export default function ExperienceContainer ({ user, setUser }) {
   function handleSubmit (e, company) {
     e.preventDefault()
     e.target.parentElement.parentElement.classList.add("submited")
-    const newCompanies = [...companies];
+    const newCompanies = companies.map(company => ({...company}));
     const currCompany = newCompanies[newCompanies.findIndex(item => item.id === company.id)]
     currCompany.companyName = e.target[0].value
     currCompany.position = e.target[1].value
@@ -83,11 +85,19 @@ export default function ExperienceContainer ({ user, setUser }) {
   }
   
   function handleDelete (id) {
+    const newCompanies = companies.map(company => ({...company}));
     if (companies.length > 1) {
-      const newCompanies = [...companies];
       newCompanies.splice(newCompanies.findIndex(item => item.id === id), 1)
-      setUser({...user, experience: newCompanies}) 
-    } else (setActiveCompany(id))
+    } else {
+        const company = newCompanies[newCompanies.findIndex(item => item.id === id)]
+        company.companyName = ""
+        company.position = ""
+        company.description = ""
+        company.from = "2000-01"
+        company.to = "2001-01"
+        setActiveCompany(id)
+      }
+    setUser({...user, experience: newCompanies}) 
   }
 
   return (
