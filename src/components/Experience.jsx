@@ -72,7 +72,6 @@ export default function ExperienceContainer ({ user, setUser }) {
 
   function handleSubmit (e, company) {
     e.preventDefault()
-    e.target.parentElement.parentElement.classList.add("submited")
     const newCompanies = companies.map(company => ({...company}));
     const currCompany = newCompanies[newCompanies.findIndex(item => item.id === company.id)]
     currCompany.companyName = e.target[0].value
